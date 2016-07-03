@@ -39,7 +39,7 @@ router.route('/facts')
 				console.log(err)
 				res.json(err)
 			}else{
-				res.json({message : "SUCCESS", data : fact})
+				res.json(fact)
 			}
 		})
 
@@ -47,7 +47,7 @@ router.route('/facts')
 	.get(function(req,res){
 		
 		Fact.findBetweenTimestamps(req.body, function(err, posts){
-			res.json({message:"SUCCESS", data : posts})
+			res.json(posts)
 		})
 		
 
@@ -79,7 +79,7 @@ router.route('/facts/:factId')
 					if(err){
 						res.json({message : "ERROR", error : err})
 					}else
-						res.json({message : "SUCCESS", data : fact})
+						res.json(fact)
 				})
 			}
 				
@@ -92,7 +92,7 @@ router.route('/facts/:factId')
 			if(err)
 				res.json({message : "ERROR", error : err})
 			else
-				res.json({message : "SUCCESS", data : fact})
+				res.json(fact)
 		})
 	})
 
@@ -103,7 +103,7 @@ router.route('/users')
 			if(err)
 				res.json({message : "ERROR", error : err})
 			else
-				res.json({message : "SUCCESS", data : user})
+				res.json(user)
 		})
 	})
 
@@ -125,7 +125,7 @@ router.route('/users/:userId')
 				if(err)
 					res.json({message : "ERROR", error : err})
 				else
-					res.json({message : "SUCCESS", data : user})
+					res.json(user)
 			})
 		})
 	})
