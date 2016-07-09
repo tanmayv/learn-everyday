@@ -152,8 +152,10 @@ router.route('/users/:userId')
 			}
 
 			user.save(function(err){
-				if(err)
+				if(err){
+					console.log(err)
 					res.json({message : "ERROR", error : err})
+				}
 				else
 					res.json(user)
 			})
