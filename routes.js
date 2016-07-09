@@ -1,4 +1,5 @@
 var express = require('express');
+var multer = require('multer');
 var propertiesReader = require('properties-reader');
 var properties = propertiesReader('properties.ini');
 // models 
@@ -16,6 +17,18 @@ mongoose.connect(mongoUrl, function(err,db){
 	else
 		console.log("Err : Cannot connect to the database")	
 })
+
+// FILE UPLOAD WITH MULTER
+var storage =   multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, './static/images');
+  },
+  filename: function (req, file, callback) {
+    callback(null, file.fieldname + '-' + Date.now() + ".jpeg");
+  }
+});
+var upload = multer({ storage : storage}).single('image');
+
 // ROUTES FOR OUR API
 // =============================================================================
 var router = express.Router();              // get an instance of the express Router
@@ -26,6 +39,19 @@ router.get('/', function(req, res) {
 });
 
 
+router.route('/photo')
+	.post(function(req,res){
+		upload(req,res,function(err) {
+        if(err) {
+            return res.json(err);
+        }
+        	res.json(req.file);
+    	});
+	})
+
+	.get(function(req,res){
+		res.sendFile(__dirname + "/upload.html")
+	})
 
 router.route('/facts')
 	.post(function(req,res){

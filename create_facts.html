@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Learn Everyday - Create Fact</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  
+  <link rel="stylesheet" href="css/bootstrap-theme.css">
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <link rel="stylesheet" href="bootstrap-fileinput/css/fileinput.css">
+  <script src="js/bootstrap.min.js"></script>
+  <script src="bootstrap-wysiwyg/external/jquery.hotkeys.js"></script>
+  <script type="text/javascript" src="bootstrap-wysiwyg/bootstrap-wysiwyg.js"></script>
+  <script src="bootstrap-wysiwyg/external/google-code-prettify/prettify.js"></script>
+  <link href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+  <script src="js/fileinput.min.js"></script>
+</head>
+<body>
+  <div class="container">
+  <div class="row">
+    <center><h1>Create New Fact</h1></center>
+  </div>
+  <form id="factform" style="position : relative">
+  <div class="form-group">
+
+    <input type="text" name="title" required class="form-control" id="facttitle" placeholder="fact title">
+    
+    <input type="text" required name="bannerUrl" class="form-control" id="facttitle" placeholder="banner url">
+    
+    <div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
+      
+      <div class="btn-group">
+        <a class="btn dropdown-toggle" data-toggle="dropdown" title="Font Size"><i class="icon-text-height"></i>&nbsp;<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+          <li><a data-edit="fontSize 5"><font size="5">Huge</font></a></li>
+          <li><a data-edit="fontSize 3"><font size="3">Normal</font></a></li>
+          <li><a data-edit="fontSize 1"><font size="1">Small</font></a></li>
+          </ul>
+      </div>
+      <div class="btn-group">
+        <a class="btn" data-edit="bold" title="Bold (Ctrl/Cmd+B)"><i class="icon-bold"></i></a>
+        <a class="btn" data-edit="italic" title="Italic (Ctrl/Cmd+I)"><i class="icon-italic"></i></a>
+        <a class="btn" data-edit="strikethrough" title="Strikethrough"><i class="icon-strikethrough"></i></a>
+        <a class="btn" data-edit="underline" title="Underline (Ctrl/Cmd+U)"><i class="icon-underline"></i></a>
+      </div>
+      <div class="btn-group">
+        <a class="btn" data-edit="insertunorderedlist" title="Bullet list"><i class="icon-list-ul"></i></a>
+        <a class="btn" data-edit="insertorderedlist" title="Number list"><i class="icon-list-ol"></i></a>
+        <a class="btn" data-edit="outdent" title="Reduce indent (Shift+Tab)"><i class="icon-indent-left"></i></a>
+        <a class="btn" data-edit="indent" title="Indent (Tab)"><i class="icon-indent-right"></i></a>
+      </div>
+      <div class="btn-group">
+        <a class="btn" data-edit="justifyleft" title="Align Left (Ctrl/Cmd+L)"><i class="icon-align-left"></i></a>
+        <a class="btn" data-edit="justifycenter" title="Center (Ctrl/Cmd+E)"><i class="icon-align-center"></i></a>
+        <a class="btn" data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)"><i class="icon-align-right"></i></a>
+        <a class="btn" data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)"><i class="icon-align-justify"></i></a>
+      </div>
+      <div class="btn-group">
+      <a class="btn dropdown-toggle" data-toggle="dropdown" title="Hyperlink"><i class="icon-link"></i></a>
+        <div class="dropdown-menu input-append">
+          <input class="span2" placeholder="URL" type="text" data-edit="createLink"/>
+          <button class="btn btn-primary" type="button">Add</button>
+        </div>
+        <a class="btn" data-edit="unlink" title="Remove Hyperlink"><i class="icon-cut"></i></a>
+
+      </div>
+      
+      <div class="btn-group">
+        <a class="btn" data-edit="undo" title="Undo (Ctrl/Cmd+Z)"><i class="icon-undo"></i></a>
+        <a class="btn" data-edit="redo" title="Redo (Ctrl/Cmd+Y)"><i class="icon-repeat"></i></a>
+      </div>
+    </div>
+
+    <div id="editor" contentEditable="true">
+      
+    </div>
+
+    <div class="btn btn-success" id="createFact" style="margin-top : 20px; position : absolute;right : 0;">
+      Publish Fact
+    </div>
+    
+  </div>
+
+
+
+  <script type="text/javascript">
+    
+    $("#createFact").click(function(){
+      console.log("SHit")
+        var formData = getFormData("#factform")
+        if(formData.title == null || formData.title == ""){
+            alert("Complete the form");
+        }
+        else{
+          formData["content"] = $("#editor").cleanHtml();
+          $.post( "api/facts", formData )
+         .done(function(data){
+        alert("Fact Published");
+        
+        })
+      }
+
+        
+      
+    })
+
+    function getFormData(id){
+      var data = $(id).serializeArray().reduce(function(obj, item) {
+      obj[item.name] = item.value;
+      return obj;
+      }, {});
+      return data;
+    }
+    
+    
+
+    $("#editor").wysiwyg()
+  </script>
+
+  <style>
+    #editor {
+  max-height: 250px;
+  height: 250px;
+  background-color: white;
+  border-collapse: separate; 
+  border: 1px solid rgb(204, 204, 204); 
+  padding: 4px; 
+  box-sizing: content-box; 
+  -webkit-box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset; 
+  box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+  border-top-right-radius: 3px; border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px; border-top-left-radius: 3px;
+  overflow: scroll;
+  outline: none;
+}
+  </style>
+</body>
+</html>

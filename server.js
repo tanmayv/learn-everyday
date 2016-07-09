@@ -14,7 +14,12 @@ var router = require('./routes.js')
 // this will let us get the data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
+app.use(express.static(__dirname));
+app.use(function(err, req, res, next) {
+  // Do logging and user-friendly error message display
+  console.error(err);
+  res.status(500).send({status:500, message: 'internal error', type:'internal'}); 
+})
 var port = process.env.PORT || 8080;        // set our port
 
 // REGISTER OUR ROUTES -------------------------------
