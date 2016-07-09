@@ -143,9 +143,14 @@ router.route('/users/:userId')
 			if(req.body.emailId)
 				user.emailId = req.body.emailId;
 			if(req.body.publishedFacts)
-				user.publishedFacts = req.body.publishedFacts;
-			if(req.body.favFacts)
-				user.favFacts = req.body.favFacts;
+			user.publishedFacts = req.body.publishedFacts;
+			if(req.body.favFacts){
+				console.log(req.body.favFacts)
+				user.favFacts = req.body.favFacts.split(",")
+				user.favFacts.forEach(function(item){
+					console.log(item);
+				})
+			}
 
 			user.save(function(err){
 				if(err)
