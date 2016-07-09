@@ -146,7 +146,6 @@ router.route('/users/:userId')
 			user.publishedFacts = req.body.publishedFacts;
 			if(req.body.favFacts){
 				console.log(req.body.favFacts + " " + typeof req.body.favFacts)
-				user.favFacts = req.body.favFacts.split(",")
 				user.favFacts.forEach(function(item){
 					console.log(item);
 				})
