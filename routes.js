@@ -155,6 +155,18 @@ router.route('/users/:userId')
 			})
 		})
 	})
+
+	.get(function(req,res){
+		var userId = req.params.userId;
+		console.log("Here")
+		User.findOne({_id : userId}).exec(function(err,user){
+		
+			if(err)
+				res.json({message : "ERROR", error : err})
+			else
+				res.json(user)
+		})
+	})
 // more routes for our API will happen here
 
 module.exports = router;
