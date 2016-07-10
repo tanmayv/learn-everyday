@@ -124,6 +124,21 @@ router.route('/facts/:factId')
 
 router.route('/users')
 	.post(function(req,res){
+		if(!req.body.emailId){
+			res.json({message : "ERROR : Email ID required"})
+		}
+		User.findOne({emailId : req.body.emailId}).exec(function(err,user){
+			if(!user){
+				newUser = new User(req.body);
+				newUser.save(function(err){
+					if(err)
+						res.json({message : "ERROR", error : err})
+					else
+						res.json(newUser)
+				})
+			}else
+				res.json(user)
+		})
 		var user = new User(req.body)
 		user.save(function(err){
 			if(err)
