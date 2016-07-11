@@ -240,6 +240,8 @@ var gcmNotify = function(dataObject){
 	});
 		
 }
+
+gcmNotify({title : "Hello man"})
 // more routes for our API will happen here
 
 module.exports = router;
