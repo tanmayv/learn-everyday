@@ -68,7 +68,12 @@ router.route('/facts')
 				console.log(err)
 				res.json(err)
 			}else{
-				gcmNotify(fact);
+				var factObject = {
+					title : fact.title,
+					bannerUrl : fact.bannerUrl,
+					content  : fact.content
+				}
+				gcmNotify(factObject);
 				res.json(fact)
 			}
 		})
@@ -241,9 +246,6 @@ var gcmNotify = function(dataObject){
 	});
 		
 }
-
-gcmNotify({title : "SHit man"})
-// more routes for our API will happen here
 
 module.exports = router;
 
