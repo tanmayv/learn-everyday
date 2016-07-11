@@ -187,7 +187,7 @@ router.route('/users/:userId')
 		})
 	})
 
-router.route("/gcm/register/{{regId}}")
+router.route("/gcm/register/:regId")
 	.post(function(req,res){
 		gcmRegId = req.params.regId;
 		console.log("GCM REQ ID " + gcmRegId);
