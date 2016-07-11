@@ -219,7 +219,8 @@ router.route("/gcm/register/:regId")
 	})
 
 var gcmNotify = function(dataObject){
-	var message = new gcm.Message(notification : dataObject);
+	var message = new gcm.Message();
+	message.addData(dataObject)
 
 	// Set up the sender with you API key, prepare your recipients' registration tokens.
 	var sender = new gcm.Sender(properties.get("db.gcm.api_key"));
@@ -241,10 +242,7 @@ var gcmNotify = function(dataObject){
 		
 }
 
-gcmNotify({notification : {
-	title : "Hello man"
-}
-})
+gcmNotify({title : "SHit man"})
 // more routes for our API will happen here
 
 module.exports = router;
