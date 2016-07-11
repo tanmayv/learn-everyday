@@ -7,6 +7,7 @@ var Fact = require('./app/model/facts.js')
 var User = require('./app/model/users.js')
 var Comment = require('./app/model/comments.js')
 var RegistrationId = require('./app/model/registration.js')
+var gcm = require('node-gcm');
 
 
 var mongoose = require('mongoose');
@@ -67,6 +68,7 @@ router.route('/facts')
 				console.log(err)
 				res.json(err)
 			}else{
+				gcmNotify(fact);
 				res.json(fact)
 			}
 		})
@@ -215,6 +217,33 @@ router.route("/gcm/register/:regId")
 				}
 			})
 	})
+
+var gcmNotify = function(dataObject){
+	var message = new gcm.Message(dataObject);
+
+	// Set up the sender with you API key, prepare your recipients' registration tokens.
+	var sender = new gcm.Sender(properties.get("db.gcm.api_key"));
+	var regTokens = []
+	var cursor = RegistrationId.find().stream();
+	cursor.on('data', function(doc) {
+		if(doc.registrationId){
+
+			regTokens.push(doc.registrationId);
+	}
+	});
+	cursor.on('close', function() {
+		console.log("This is it"  + regTokens.toString());
+	  sender.send(message, { registrationTokens: regTokens }, function (err, response) {
+		  if(err) console.error(err);
+		  else    console.log(response);
+		});
+	});
+		
+}
 // more routes for our API will happen here
 
 module.exports = router;
+
+
+
+

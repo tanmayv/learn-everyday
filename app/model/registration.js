@@ -1,7 +1,7 @@
 var mongoose = require("mongoose")
 
 var registraionSchema = new mongoose.Schema({
-  registraionId : String
+  registrationId : String
  },
 {
   timestamps : true
