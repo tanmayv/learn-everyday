@@ -24,7 +24,7 @@ factSchema.statics.findBetweenTimestamps = function(input,callback){
 		input.timestampFrom = new Date()
 	}
 	if(!input.limit){
-		input.limit = 5
+		input.limit = 15
 	}
 	if(input.timestampTo){
 		this.find($and[{updatedAt : {$lte : input.timestampFrom}},{updatedAt : {$gte : input.timestampTo}}]).limit(input.limit).sort({"updatedAt": -1}).exec(callback);
