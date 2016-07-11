@@ -6,6 +6,8 @@ var properties = propertiesReader('properties.ini');
 var Fact = require('./app/model/facts.js')
 var User = require('./app/model/users.js')
 var Comment = require('./app/model/comments.js')
+var RegistrationId = require('./app/model/registration.js')
+
 
 var mongoose = require('mongoose');
 
@@ -183,6 +185,34 @@ router.route('/users/:userId')
 			else
 				res.json(user)
 		})
+	})
+
+router.route("/gcm/register")
+	.post(function(req,res){
+		gcmRegId = req.body.registrationId;
+		console.log("GCM REQ ID " + gcmRegId);
+		RegistrationId.findOne({registrationId : gcmRegId})
+			.exec(function(err,regId){
+				if(!err){
+					if(!regId){
+						newRegId = new RegistrationId({registrationId : gcmRegId})
+						newRegId.save(function(err){
+							if(!err)
+								res.status(200)
+								res.end()
+							else{
+								res.status(500)
+								res.end()
+							}
+						})
+					}else{
+						res.status(200)
+						res.end()
+					}
+				}else{
+					res.status(500)
+				}
+			})
 	})
 // more routes for our API will happen here
 
