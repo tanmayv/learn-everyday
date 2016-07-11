@@ -197,9 +197,10 @@ router.route("/gcm/register")
 					if(!regId){
 						newRegId = new RegistrationId({registrationId : gcmRegId})
 						newRegId.save(function(err){
-							if(!err)
+							if(!err){
 								res.status(200)
 								res.end()
+							}
 							else{
 								res.status(500)
 								res.end()
