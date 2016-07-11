@@ -189,6 +189,7 @@ router.route('/users/:userId')
 
 router.route("/gcm/register")
 	.post(function(req,res){
+		console.log("Req Body " + JSON.stringify(req.body))
 		gcmRegId = req.body;
 		console.log("GCM REQ ID " + gcmRegId);
 		RegistrationId.findOne({registrationId : gcmRegId})
