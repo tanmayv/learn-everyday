@@ -7,6 +7,12 @@
 var express    = require('express');        // call express
 var app        = express();                 // define our app using express
 var bodyParser = require('body-parser');
+var solr = require('solr-client');
+
+// Create a client
+var solrClient = solr.createClient();
+solrClient.options.port = 8983
+solrClient.options.path = '/solr/facts'
 
 var router = require('./routes.js')
 
@@ -25,6 +31,16 @@ var port = process.env.PORT || 8080;        // set our port
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
 app.use('/api', router);
+app.get('/', function(req,res){
+  if(req.query.q){
+    var query = solrClient.createQuery();
+      query.q(req.query.q)
+      solrClient.search(query,function(err,response){
+        res.send(response.response.docs)
+      })
+  }else
+  res.send({});
+})
 app.listen(port);
 
 

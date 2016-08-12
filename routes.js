@@ -9,7 +9,13 @@ var Comment = require('./app/model/comments.js')
 var RegistrationId = require('./app/model/registration.js')
 var gcm = require('node-gcm');
 
+var solr = require('solr-client');
 
+// Create a client
+var solrClient = solr.createClient();
+solrClient.options.port = 8983
+solrClient.options.path = '/solr/facts'
+		
 var mongoose = require('mongoose');
 
 var mongoUrl = properties.get('db.mongo.url');
@@ -42,19 +48,31 @@ router.get('/', function(req, res) {
 });
 
 
-router.route('/photo')
-	.post(function(req,res){
-		upload(req,res,function(err) {
-        if(err) {
-            return res.json(err);
-        }
-        	res.json(req.file);
-    	});
+router.route('/index')
+	.get(function(req,res){
+		responses = []
+		Fact.find().exec(function(err,facts){
+			for(i = 0; i < facts.length; i++){
+				console.log(facts[i].title)
+				solrClient.add({
+					'_id' : facts[i]._id,
+					'title' : facts[i].title,
+					'content' : facts[i].content,
+					'createdAt' : facts[i].createdAt
+				}, function(err, response){
+					if(err)
+						console.log(err)
+					else{
+						console.log(response)
+					}
+						responses.push(response)
+				})
+			}
+			res.send(responses)
+		})
+
 	})
 
-	.get(function(req,res){
-		res.sendFile(__dirname + "/upload.html")
-	})
 
 router.route('/facts')
 	.post(function(req,res){
