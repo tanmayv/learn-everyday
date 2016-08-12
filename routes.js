@@ -88,6 +88,17 @@ router.route('/facts')
 
 	})
 
+router.route('/facts/after/:timestampFrom')
+
+	.get(function(req,res){
+		var param = {
+			'timestampFrom' : req.params.timestampFrom
+		}
+		Fact.findBetweenTimestamps(param, function(err, posts){
+			res.json(posts)
+		})
+
+	})
 router.route('/facts/:factId')
 	.post(function(req,res){
 		var factId = req.params.factId;
