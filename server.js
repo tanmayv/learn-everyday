@@ -39,7 +39,7 @@ app.get('/', function(req,res){
         res.send(response.response.docs)
       })
   }else
-  res.send({});
+  res.send({"message" : "Nothing here to see"});
 })
 app.listen(port);
 
