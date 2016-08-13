@@ -54,21 +54,31 @@ router.route('/index')
 		Fact.find().exec(function(err,facts){
 			for(i = 0; i < facts.length; i++){
 				console.log(facts[i].title)
-				solrClient.add({
+				facts[i] = {
+					'id' : facts[i]._id,
 					'_id' : facts[i]._id,
 					'title' : facts[i].title,
 					'content' : facts[i].content,
 					'createdAt' : facts[i].createdAt
-				}, function(err, response){
+				}
+				
+			}
+			console.log(facts)
+			solrClient.add(facts, function(err, response){
 					if(err)
 						console.log(err)
 					else{
+						solrClient.commit(function(err,response){
+							if(err)
+								console.log(err)
+							else
+								console.log("Commit Response" + JSON.stringify(response))
+						})
 						console.log(response)
 					}
-						responses.push(response)
+						
 				})
-			}
-			res.send(responses)
+			res.send({message : "indexing requested"})
 		})
 
 	})
