@@ -36,7 +36,22 @@ app.get('/', function(req,res){
     var query = solrClient.createQuery();
       query.q(req.query.q)
       solrClient.search(query,function(err,response){
-        res.send(response.response.docs)
+        var docs = response.response.docs;
+        for(i = 0 ; i < docs.length; i++){
+          if(docs[i]._id instanceof Array){
+            docs._id = docs[i]._id[0];
+          }
+          if(docs[i].title instanceof Array){
+            docs[i].title = docs[i].title[0];
+          }
+          if(docs[i].content instanceof Array){
+            docs[i].content = docs[i].content[0];
+          }
+          if(docs[i].createdAt instanceof Array){
+            docs[i].createdAt = docs[i].createdAt[0];
+          }
+        }
+        res.send(docs)
       })
   }else
   res.send({"message" : "Nothing here to see"});
